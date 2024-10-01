@@ -1,0 +1,432 @@
+h1 {
+    text-align: center;
+}
+
+.center-buttons {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+.db-button {
+    padding: 10px 20px;
+    margin: 0 10px;
+    border: none;
+    background-color: #ccc;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.showHide-button {
+    margin-right: 20px;
+    border: none;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 3px;
+    white-space: nowrap;
+    text-align: center;
+    box-sizing: border-box;
+    margin: 0em;
+    padding-block: 3px;
+    padding-inline: 8px;
+}
+
+.showHide-button:hover,
+.showHide-button:focus,
+.showHide-button:active {
+    color: #2981e0;
+}
+
+.active {
+    background-color: #4CAF50;
+    color: white;
+}
+
+@font-face {
+    font-family: 'Neue Montreal';
+    src: url('fonts/NeueMontreal-Regular.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Neue Montreal';
+    src: url('fonts/NeueMontreal-Bold.otf') format('opentype');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Neue Montreal';
+    src: url('fonts/NeueMontreal-Italic.otf') format('opentype');
+    font-weight: normal;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Neue Montreal';
+    src: url('fonts/NeueMontreal-BoldItalic.otf') format('opentype');
+    font-weight: bold;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Neue Montreal';
+    src: url('fonts/NeueMontreal-Light.otf') format('opentype');
+    font-weight: 300;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Neue Montreal';
+    src: url('fonts/NeueMontreal-LightItalic.otf') format('opentype');
+    font-weight: 300;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Neue Montreal';
+    src: url('fonts/NeueMontreal-Medium.otf') format('opentype');
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Neue Montreal';
+    src: url('fonts/NeueMontreal-MediumItalic.otf') format('opentype');
+    font-weight: 500;
+    font-style: italic;
+}
+
+body {
+background: #eee;
+font-family: 'Neue Montreal', sans-serif;
+font-size: 16px;
+color: #333;
+text-align: center;
+}
+
+a {
+color: #2A679F;
+}
+
+.form-wrapper-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.form-wrapper {
+background-color: #f6f6f6;
+overflow: hidden;
+padding: 8px;
+border-radius: 5px;
+display: flex;
+align-items: center;
+}
+
+.form-wrapper #job-number-search {
+color: #999;
+font-family: 'Neue Montreal', sans-serif;
+font-size: 16px;
+height: 22px;
+padding: 10px;
+width: 320px;
+border-radius: 5px;
+border: 1px solid #333;
+border-left-width: 0.5px;
+border-top-left-radius: 0px;
+border-bottom-left-radius: 0px;
+}
+
+.form-wrapper #job-number-search:focus {
+outline: 0;
+}
+
+.form-wrapper #job-number-search:-moz-placeholder,
+.form-wrapper #job-number-search:-ms-input-placeholder,
+.form-wrapper #job-number-search::-webkit-input-placeholder {
+color: #999;
+font-weight: normal;
+}
+
+.form-wrapper #submit {
+background-color: #4CAF50;
+color: white;
+cursor: pointer;
+height: 42px;
+font-family: 'Neue Montreal', sans-serif;
+font-size: 16px;
+text-transform: uppercase;
+border: none;
+border-radius: 5px;
+padding: 10px 20px;
+margin-left: 10px;
+}
+
+.form-wrapper #submit:hover,
+.form-wrapper #submit:focus {
+background-color: #6dc470;
+}
+
+.form-wrapper #submit:active {
+outline: 0;
+}
+
+.form-wrapper #submit::-moz-focus-inner {
+border: 0;
+}
+
+.form-layout {
+display: flex;
+grid-template-columns: auto 1fr;
+gap: 20px;
+flex-direction: column;
+align-items: left;
+justify-content: left;
+text-align: left;
+}
+.form-group {
+display: flex;
+flex-direction: column;
+align-items: center;
+gap: 10px;
+justify-content: space-between;
+}
+
+#search-parameter {
+    color: #999;
+    font-family: 'Neue Montreal', sans-serif;
+    font-size: 16px;
+    height: 44px;
+    padding: 10px;
+    width: 120px;
+    border: 1px solid #333;
+    border-right-width: 0.5px;
+    border-radius: 5px;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+    background-color: #f6f6f6;
+    cursor: pointer;
+    box-shadow: inset 0 0 2px rgba(0,0,0,0.1);
+}
+
+#search-parameter:focus {
+    outline: none;
+    background-color: #fff;
+}
+
+#search-parameter:hover {
+    background-color: #e6e6e6;
+}
+
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+th, td {
+    background-color: white;
+    white-space: nowrap;
+}
+
+th {
+    width: 10%;
+    padding: 5px;
+    text-align: center;
+}
+
+td {
+    padding: 5px;
+    padding-left: auto;
+    padding-right: auto;
+    align-content: center;
+    text-align: center;
+}
+
+.inputs {
+    width: 100%;
+    align-content: center;
+    text-align: center;
+    padding-left: 5px;
+    padding-right: 5px;
+    box-sizing: border-box;
+    border: none;
+    font-family: 'Neue Montreal', sans-serif;
+    font-size: 15px;
+}
+
+.extra-sec {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.dates-tasks-labels {
+flex: 0 0 auto;
+margin-right: 10px;
+}
+
+.showSubInfo {
+    border: none;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 3px;
+    white-space: nowrap;
+    text-align: center;
+    box-sizing: border-box;
+    margin: 0em;
+    padding-block: 3px; /* 1+2px for border */
+    padding-inline: 8px; /* 6+2px for border */
+}
+
+.showSubInfo:hover,
+.showSubInfo:focus,
+.showSubInfo:active {
+    color: #2981e0;
+}
+
+.subInfoDiv {
+    align-self: center;
+    width: 50%;
+}
+
+.sub-tasks {
+    flex: 1 1 auto;
+    align-content: center;
+    text-align: left;
+    padding-left: 5px;
+    padding-right: 5px;
+    box-sizing: border-box;
+    font-family: 'Neue Montreal', sans-serif;
+    font-size: 15px;
+    white-space: nowrap;
+}
+
+.add-sub-tasks {
+    flex: 1 1 auto;
+    align-content: center;
+    text-align: left;
+    padding-left: 5px;
+    padding-right: 5px;
+    box-sizing: border-box;
+    font-family: 'Neue Montreal', sans-serif;
+    font-size: 15px;
+    white-space: nowrap;
+}
+
+.add-dates {
+    flex: 1 1 auto;
+    align-content: center;
+    text-align: left;
+    padding-left: 5px;
+    padding-right: 5px;
+    box-sizing: border-box;
+    font-family: 'Neue Montreal', sans-serif;
+    font-size: 15px;
+    white-space: nowrap;
+}
+
+.dates-edit-int {
+    flex: 1 1 auto;
+    align-content: center;
+    text-align: left;
+    padding-left: 5px;
+    padding-right: 5px;
+    box-sizing: border-box;
+    font-family: 'Neue Montreal', sans-serif;
+    font-size: 15px;
+    white-space: nowrap;
+}
+
+.sub-tasks-edit-int {
+    flex: 1 1 auto;
+    align-content: center;
+    text-align: left;
+    padding-left: 5px;
+    padding-right: 5px;
+    box-sizing: border-box;
+    font-family: 'Neue Montreal', sans-serif;
+    font-size: 15px;
+    white-space: nowrap;
+}
+
+.add-input {
+    width: 100%;
+    align-content: center;
+    text-align: center;
+    padding-left: 5px;
+    padding-right: 5px;
+    box-sizing: border-box;
+    font-family: 'Neue Montreal', sans-serif;
+    font-size: 15px;
+}
+
+.dates {
+    width: 1px;
+    min-width: calc(5ch + 6px);
+    text-align: center;
+    padding-left: 5px;
+    padding-right: 5px;
+    box-sizing: border-box;
+    border: none;
+    font-family: 'Neue Montreal', sans-serif;
+    font-size: 16px;
+    background-color: #eee;
+}
+
+.result-item {
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 5px;
+}
+
+.footer {
+    margin-top: 10px;
+    padding: 5px;
+    font-style: italic;
+    font-size: 12px;
+    color: #666;
+    text-align: right;
+}
+
+footer {
+    text-align: center;
+    padding: 10px;
+    background-color: #f1f1f1; /* Light gray background */
+    color: #333;               /* Dark text */
+    position: fixed;           /* Keeps the footer at the bottom of the viewport */
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    font-family: 'Neue Montreal', sans-serif; /* Use your custom font if desired */
+    font-size: 0.9em;
+}
+
+.report-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #4CAF50;
+    color: #fff;
+    border: none;
+    font-size: 1.5em;
+    cursor: pointer;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.report-button:hover {
+    background-color: #6dc470;
+}
