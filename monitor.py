@@ -1,8 +1,8 @@
-import pandas as pd 
+import pandas as pd
 import tkinter as tk
 from tkinter import font
-import tkinter as tk
 import requests
+from datetime import datetime
 
 url = "https://akita-healthy-suitably.ngrok-free.app"
 
@@ -23,6 +23,22 @@ root.grid_columnconfigure(0, weight=1)
 root.grid_columnconfigure(1, weight=0)
 root.grid_columnconfigure(2, weight=1)
 root.grid_rowconfigure(0, weight=1)
+
+status_bar = tk.Frame(root, height=30)
+status_bar.grid(row=1, column=0, columnspan=3, sticky="ew")
+status_label = tk.Label(
+    status_bar, 
+    text="No actions yet",
+    anchor="e", 
+    font=("Arial", 16),
+    padx=10,
+    pady=5
+)
+status_label.pack(fill="both")
+
+def update_status_bar(database):
+    current_time = datetime.now().strftime("%m/%d/%Y %I:%M %p")
+    status_label.config(text=f"Last Updated: {database} - {current_time}")
 
 def scroll_text(label, text, scroll_delay=150, restart_delay=3000):
     original_text = text
@@ -118,10 +134,12 @@ def refresh_data():
     if not data_smh.empty and not data_smh.equals(previous_data_smh):
         update_table(data_smh, frame_smh, ['Job#', 'Loc.', 'SMH'])
         previous_data_smh = data_smh
+        update_status_bar('SMH')
 
     if not data_rmh.empty and not data_rmh.equals(previous_data_rmh):
         update_table(data_rmh, frame_rmh, ['Job#', 'Loc.', 'RMH'])
         previous_data_rmh = data_rmh
+        update_status_bar('RMH')
 
     root.after(5000, refresh_data)  # Refresh every 5 seconds
 

@@ -99,6 +99,15 @@
     <button class="report-button" onclick="reportError()">
         ?
     </button>
+
+    <div id="errorReportDialog" class="modal">
+        <div class="modal-content">
+          <p>How would you like to report the error?</p>
+          <button onclick="sendEmail()">Email</button>
+          <button onclick="sendText()">Text</button>
+          <button onclick="closeDialog()">Cancel</button>
+        </div>
+      </div>
     <script src="/static/js/scripts.js"></script>
 </body>
 </html>

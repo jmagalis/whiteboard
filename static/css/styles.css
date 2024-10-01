@@ -13,6 +13,7 @@ h1 {
     margin: 0 10px;
     border: none;
     background-color: #ccc;
+    font-family: 'Neue Montreal', sans-serif;
     font-size: 16px;
     cursor: pointer;
     border-radius: 5px;
@@ -430,3 +431,114 @@ footer {
 .report-button:hover {
     background-color: #6dc470;
 }
+
+/* Mobile Styles Only - Targets Screens Smaller than 768px */
+@media (max-width: 768px) {
+    .form-wrapper-container {
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .form-wrapper {
+        flex-direction: column;
+        width: 90%;
+    }
+
+    #job-number-search, #submit, #search-parameter {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .form-wrapper #job-number-search {
+        border-radius: 5px;
+        border: 1px solid #333;
+    }
+
+    .form-wrapper #search-parameter {
+        border: 1px solid #333;
+        border-radius: 5px;
+    }
+
+    .form-wrapper #submit {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .form-layout {
+        width: 100%;
+        gap: 10px;
+    }
+
+
+    table {
+        width: 100%;
+        margin-left: auto;
+        margin-right: auto;
+        border: 1px solid black;
+        border-collapse: collapse;
+        overflow-x: auto;
+        display: block;
+    }
+    
+    th {
+        padding-left: 40px;
+        padding-right: 40px;
+    }
+
+    .report-button {
+        width: 50px;
+        height: 50px;
+        font-size: 1.2em;
+    }
+}
+
+@media (max-width: 480px) {
+    h1 {
+        font-size: 1.75em;
+    }
+
+    .db-button {
+        width: auto;
+        margin-bottom: 10px;
+        padding: 15px;
+        padding-left: 30px;
+        padding-right: 30px;
+        font-size: 18px;
+        white-space: nowrap;
+    }
+
+    .subInfoDiv {
+        align-self: left;
+        width: 100%;
+    }
+
+    footer {
+        font-size: 0.8em;
+    }
+}
+
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    background-color: rgba(0, 0, 0, 0.5); /* Black with opacity */
+  }
+
+  .modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 300px; /* Width of the modal */
+    text-align: center;
+  }
+
+  .modal-content button {
+    margin: 10px;
+    padding: 10px;
+    font-size: 16px;
+  }
