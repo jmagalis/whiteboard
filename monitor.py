@@ -11,6 +11,8 @@ root.title("JCI Job Board - Mayo Clinic")
 screen_width = root.winfo_screenwidth()
 screen_height = root.winfo_screenheight()
 root.geometry(f"{screen_width}x{screen_height}")
+root.attributes("-fullscreen", True)
+root.bind("<Escape>", lambda e: root.attributes("-fullscreen", False))
 
 frame_smh = tk.Frame(root)
 frame_smh.grid(row=0, column=0, sticky="nsew")
