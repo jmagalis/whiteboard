@@ -110,7 +110,7 @@ def update_table(data, frame, headers):
     column_widths = [
         int(screen_width * 0.05),  # Width for 'Job#' (5% of screen width)
         int(screen_width * 0.075), # Width for 'Loc.' (7.5% of screen width)
-        int(screen_width * 0.5)    # Width for 'Tasks' (50% of screen width)
+        int(screen_width * 0.375)    # Width for 'Tasks' (50% of screen width)
     ]
     for i, width in enumerate(column_widths):
         frame.grid_columnconfigure(i, minsize=width)
@@ -125,7 +125,8 @@ def update_table(data, frame, headers):
             borderwidth=2,
             relief="solid",
             padx=5,
-            pady=5
+            pady=5,
+            anchor="center"
         )
         label.grid(row=0, column=i, sticky="nsew")
 
