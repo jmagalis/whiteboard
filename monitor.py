@@ -8,7 +8,9 @@ url = "https://akita-healthy-suitably.ngrok-free.app"
 
 root = tk.Tk()
 root.title("JCI Job Board - Mayo Clinic") 
-root.geometry("1920x1080")
+screen_width = root.winfo_screenwidth()
+screen_height = root.winfo_screenheight()
+root.geometry(f"{screen_width}x{screen_height}")
 
 frame_smh = tk.Frame(root)
 frame_smh.grid(row=0, column=0, sticky="nsew")
@@ -105,7 +107,11 @@ def update_table(data, frame, headers):
     for widget in frame.winfo_children():
         widget.destroy()
 
-    column_widths = [96, 144, 720]
+    column_widths = [
+        int(screen_width * 0.05),  # Width for 'Job#' (5% of screen width)
+        int(screen_width * 0.075), # Width for 'Loc.' (7.5% of screen width)
+        int(screen_width * 0.5)    # Width for 'Tasks' (50% of screen width)
+    ]
     for i, width in enumerate(column_widths):
         frame.grid_columnconfigure(i, minsize=width)
 
@@ -140,7 +146,10 @@ def update_table(data, frame, headers):
 
             text_font = font.Font(family="Arial", size=18)
             text_width = text_font.measure(value)
-            max_width = [86, 134, 510][col_idx]
+            if col_idx == 2:
+                max_width = column_widths[col_idx] - 200
+            else:
+                max_width = column_widths[col_idx] - 20
             if text_width > max_width:
                 label.config(anchor="w")
                 scroll_text(label, value)
