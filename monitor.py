@@ -26,6 +26,18 @@ root.grid_rowconfigure(0, weight=1)
 
 status_bar = tk.Frame(root, height=30)
 status_bar.grid(row=1, column=0, columnspan=3, sticky="ew")
+
+internet_status_label = tk.Label(
+    status_bar,
+    text="Disconnected ᯤ",
+    anchor="w",
+    font=("Arial", 16),
+    padx=10,
+    pady=5,
+    fg="red"
+)
+internet_status_label.pack(side="left")
+
 status_label = tk.Label(
     status_bar, 
     text="No actions yet",
@@ -34,11 +46,32 @@ status_label = tk.Label(
     padx=10,
     pady=5
 )
-status_label.pack(fill="both")
+status_label.pack(side="right", fill="both")
 
 def update_status_bar(database):
     current_time = datetime.now().strftime("%m/%d/%Y %I:%M %p")
     status_label.config(text=f"Last Updated: {database} - {current_time}")
+
+def init_internetStatus():
+    try:
+        response = requests.get("https://www.google.com", timeout=5)
+        if response.status_code == 200:
+            internet_status_label.config(text="Connected ᯤ", fg="green")
+        else:
+            internet_status_label.config(text="Disconnected 🔴 Restart Monitor", fg="red")
+    except requests.RequestException:
+        internet_status_label.config(text="Disconnected 🔴 Restart Monitor", fg="red")
+
+def update_internetStatus():
+    try:
+        response = requests.get("https://www.google.com", timeout=5)
+        if response.status_code != 200:
+            internet_status_label.config(text="Disconnected 🔴 Restart Monitor", fg="red")
+    except requests.RequestException:
+        internet_status_label.config(text="Disconnected 🔴 Restart Monitor", fg="red")
+
+    root.after(5000, update_internetStatus)
+    
 
 def scroll_text(label, text, scroll_delay=150, restart_delay=3000):
     original_text = text
@@ -142,6 +175,9 @@ def refresh_data():
         update_status_bar('RMH')
 
     root.after(5000, refresh_data)  # Refresh every 5 seconds
+
+init_internetStatus()
+update_internetStatus()
 
 refresh_data()
 root.mainloop()
