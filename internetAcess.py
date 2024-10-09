@@ -6,13 +6,17 @@ import pyautogui
 import time
 import subprocess
 import os
+import requests
 
-def check_internet():
-    try:
-        subprocess.check_call(['ping', '-c', '1', '8.8.8.8'], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-        return True
-    except subprocess.CalledProcessError:
-        return False
+def check_internet(attempts=3, delay=3):
+    for attempt in range(attempts):
+        try:
+            response = requests.get("https://www.google.com", timeout=5)
+            if response.status_code == 200:
+                return True
+        except (requests.ConnectionError, requests.Timeout):
+            time.sleep(5)
+    return False
 
 def connect_to_wifi():
     os.system("networksetup -setairportnetwork en0 'mayoguest'")
@@ -34,7 +38,7 @@ def authenticate():
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
     
-    driver_path = "/Users/issacmagallanes/Downloads/chromedriver"  # Update this path accordingly
+    driver_path = "/usr/bin/chromedriver"  # Update this path accordingly
     driver = webdriver.Chrome(service=Service(driver_path), options=options)
     
     try:
