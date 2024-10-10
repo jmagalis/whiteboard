@@ -2,7 +2,7 @@ import subprocess
 
 def main():
     commands = [
-        "sudo apt install python3-pandas"
+        "sudo apt install python3-pandas",
         "sudo apt install python3-selenium",
         "pip install chromium-chromedriver",
         "sudo pip3 install pyautogui --break-system-packages",

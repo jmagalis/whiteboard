@@ -12,7 +12,9 @@ screen_width = root.winfo_screenwidth()
 screen_height = root.winfo_screenheight()
 root.geometry(f"{screen_width}x{screen_height}")
 root.attributes("-fullscreen", True)
-root.bind("<Escape>", lambda e: root.attributes("-fullscreen", False))
+root.bind("<Escape>", lambda e: root.destroy())
+
+root.attributes("-type", "splash")
 
 frame_smh = tk.Frame(root)
 frame_smh.grid(row=0, column=0, sticky="nsew")
@@ -110,9 +112,9 @@ def update_table(data, frame, headers):
         widget.destroy()
 
     column_widths = [
-        int(screen_width * 0.05),  # Width for 'Job#' (5% of screen width)
-        int(screen_width * 0.075), # Width for 'Loc.' (7.5% of screen width)
-        int(screen_width * 0.375)    # Width for 'Tasks' (50% of screen width)
+        int(screen_width * 0.06),  # Width for 'Job#' (6% of screen width)
+        int(screen_width * 0.09), # Width for 'Loc.' (9% of screen width)
+        int(screen_width * 0.35)    # Width for 'Tasks' (35% of screen width)
     ]
     for i, width in enumerate(column_widths):
         frame.grid_columnconfigure(i, minsize=width)

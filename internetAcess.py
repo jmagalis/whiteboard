@@ -19,7 +19,7 @@ def check_internet(attempts=3, delay=3):
     return False
 
 def connect_to_wifi():
-    os.system("networksetup -setairportnetwork en0 'mayoguest'")
+    os.system(f"nmcli d wifi connect 'mayoguest'")
 
 def close_pop_up():
     try:
