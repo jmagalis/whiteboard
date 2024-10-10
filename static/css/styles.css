@@ -369,7 +369,7 @@ margin-right: 10px;
 
 .dates {
     width: 1px;
-    min-width: calc(5ch + 6px);
+    min-width: calc(8ch + 6px);
     text-align: center;
     padding-left: 5px;
     padding-right: 5px;
