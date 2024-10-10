@@ -254,9 +254,34 @@ function viewAll() {
     return false;
 }
 
+let jobResults = [];
+
+function expandJobDetail(index) {
+    const result = jobResults[index];
+    const dialog = document.getElementById('jobDetailDialog');
+    const content = document.getElementById('jobDetailContent');
+    
+    // Create the content of the dialog dynamically based on the result
+    content.innerHTML = `
+        <h3>Job Details</h3>
+        <p><strong>Job Number:</strong> ${result['Job#']}</p>
+        <p><strong>Location:</strong> ${result['Loc.']}</p>
+        <p><strong>Tasks:</strong> ${result['Tasks']}</p>
+    `;
+    
+    dialog.style.display = 'flex';
+}
+
+function closeJobDetailDialog() {
+    const dialog = document.getElementById('jobDetailDialog');
+    dialog.style.display = 'none';
+}
+
 function displayResults(data) {
     const resultsContainer = document.getElementById('results-container');
     resultsContainer.innerHTML = '';
+    
+    jobResults = data;
     
     data.forEach((result, index) => {
         console.log(`Displaying result with index: ${index}`);
@@ -292,6 +317,7 @@ function displayResults(data) {
                         </table>
                         <div class="subInfoDiv">
                             <button class="showSubInfo" type="button" onclick="showSubInfo(${index})" id="additional-info-${index}">+ Additional Information</button>
+                            <button class="showSubInfo" type="button" style="float:right" onclick="expandJobDetail(${index})">+ Expand Info</button>
                         </div>
                         <div class="subInfoDiv" id="subInfoEdit_${index}" style="display:none;">
                             <div class="extra-sec">
