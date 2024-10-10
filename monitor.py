@@ -194,7 +194,7 @@ def refresh_data():
         previous_data_rmh = data_rmh
         update_status_bar('RMH')
 
-    root.after(5000, refresh_data)  # Refresh every 5 seconds
+    root.after(600000, refresh_data)  # Refresh every 5 seconds
 
 init_internetStatus()
 update_internetStatus()
