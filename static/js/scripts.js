@@ -350,6 +350,9 @@ function displayResults(data) {
                             <input type="text" id="client_edit_${index}" name="Client" required>
                         </div>
                         <div style="align-self:center">
+                            <button class="db-button" id="switch-db-${index}" type="button" style="display:none" onclick="switchJobDB(${index})">Switch Database</button>
+                        </div>
+                        <div style="align-self:center">
                             <button class="db-button" id="toggle-edit-${index}" type="button" onclick="toggleEdit(${index})">Edit Job</button>
                             <button class="db-button" type="button" onclick="deleteJob(${index})">Delete Job</button>
                         </div>
@@ -413,6 +416,7 @@ function toggleEdit(index) {
     const dates = document.querySelectorAll(`#update-job-form-${index} .dates`);
     const subTasks = document.querySelectorAll(`#update-job-form-${index} .sub-tasks`);
     const nameInput = document.getElementById(`client_edit_${index}`);
+    const switchDBButton = document.getElementById(`switch-db-${index}`);
 
     const beforeJobNumberInput = document.getElementById(`before_job_number_edit_${index}`);
     const afterJobNumberInput = document.getElementById(`after_job_number_edit_${index}`);
@@ -445,6 +449,8 @@ function toggleEdit(index) {
 
         nameInput.setAttribute('required', 'true');
 
+        switchDBButton.style.display = 'block';
+
         toggleButton.innerText = "Update Job";
         isEditMode[index] = true;
     }
@@ -459,6 +465,7 @@ function resetToggleEdit() {
             const dates = document.querySelectorAll(`#update-job-form-${index} .dates-edit-int`);
             const subTasks = document.querySelectorAll(`#update-job-form-${index} .sub-tasks-edit-int`);
             const toggleButton = document.getElementById(`toggle-edit-${index}`);
+            const switchDBButton = document.getElementById(`switch-db-${index}`);
 
             const beforeJobNumberInput = document.getElementById(`before_job_number_edit_${index}`);
             const afterJobNumberInput = document.getElementById(`after_job_number_edit_${index}`);
@@ -485,6 +492,7 @@ function resetToggleEdit() {
                 console.error(`${index}`);
                 return;
             }
+            switchDBButton.style.display = 'none';
             beforeJobNumberInput.style.display = 'block';
             console.log("Showed before");
             afterJobNumberInput.style.display = 'none';
