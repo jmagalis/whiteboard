@@ -158,7 +158,7 @@ def update_table(data, frame, headers):
             text_font = font.Font(family="Arial", size=18)
             text_width = text_font.measure(value)
             if col_idx == 2:
-                max_width = column_widths[col_idx] - 200
+                max_width = column_widths[col_idx] - 50
             else:
                 max_width = column_widths[col_idx] - 20
             if text_width > max_width:
