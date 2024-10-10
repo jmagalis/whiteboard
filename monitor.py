@@ -79,9 +79,15 @@ def update_internetStatus():
     root.after(5000, update_internetStatus)
     
 
-def scroll_text(label, text, scroll_delay=150, restart_delay=3000):
+def scroll_text(label, text, column_index, scroll_delay=150, restart_delay=3000):
+    gap_sizes = {
+        0: 10,  # 'Job#' column (smaller gap)
+        1: 15,  # 'Loc.' column (medium gap)
+        2: 35   # 'Tasks' column (larger gap)
+    }
+    gap = " " * gap_sizes.get(column_index, 40)
     original_text = text
-    text = text + " " * 40
+    text = text + gap
     def scroll():
         nonlocal text
         text = text[1:] + text[0]
@@ -92,7 +98,7 @@ def scroll_text(label, text, scroll_delay=150, restart_delay=3000):
             label.after(scroll_delay, scroll)
     def start_scrolling():
         nonlocal text
-        text = original_text + " " * 40
+        text = original_text + gap
         scroll()
     start_scrolling()
 
@@ -157,7 +163,7 @@ def update_table(data, frame, headers):
                 max_width = column_widths[col_idx] - 20
             if text_width > max_width:
                 label.config(anchor="w")
-                scroll_text(label, value)
+                scroll_text(label, value, col_idx)
             else:
                 label.config(text=value)
 
