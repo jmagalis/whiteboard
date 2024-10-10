@@ -1,6 +1,6 @@
 # Release 1.2.0 BETA
-# JCI Job Board - Mayo Clinic
-## Section 2 header
+## JCI Whiteboard Project
+This project utilizes Raspberry Pis to create a 
 ### Section 3 header
 ``` python monitor.py ``` \n
 - sdfj
