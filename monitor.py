@@ -54,6 +54,10 @@ status_label = tk.Label(
 )
 status_label.pack(side="right", fill="both")
 
+jobs_per_page = 24
+current_page_smh = 0
+current_page_rmh = 0
+
 def update_status_bar(database):
     current_time = datetime.now().strftime("%m/%d/%Y %I:%M %p")
     status_label.config(text=f"Last Updated: {database} - {current_time}")
@@ -77,7 +81,6 @@ def update_internetStatus():
         internet_status_label.config(text="Disconnected 🔴 Restart Monitor", fg="red")
 
     root.after(5000, update_internetStatus)
-    
 
 def scroll_text(label, text, column_index, scroll_delay=150, restart_delay=3000):
     gap_sizes = {
@@ -102,25 +105,21 @@ def scroll_text(label, text, column_index, scroll_delay=150, restart_delay=3000)
         scroll()
     start_scrolling()
 
-def smooth_scroll_text(label, text, delay=100, scroll_step=1):
-    full_text = text + " " * 20
-    text_length = len(full_text)
-    def scroll(current_index):
-        new_text = full_text[current_index:current_index + 50]
-        label.config(text=new_text)
-        next_index = (current_index + scroll_step) % text_length
-        label.after(delay, lambda: scroll(next_index))
-    scroll(0)
-
-def update_table(data, frame, headers):
+def update_table(data, frame, headers, page):
     filtered_data = data[['Job#', 'Loc.', 'Tasks']] if 'Job#' in data.columns else pd.DataFrame()
+
+    # Get the jobs for the current page
+    start_index = page * jobs_per_page
+    end_index = start_index + jobs_per_page
+    paged_data = filtered_data.iloc[start_index:end_index]
+
     for widget in frame.winfo_children():
         widget.destroy()
 
     column_widths = [
         int(screen_width * 0.06),  # Width for 'Job#' (6% of screen width)
-        int(screen_width * 0.09), # Width for 'Loc.' (9% of screen width)
-        int(screen_width * 0.35)    # Width for 'Tasks' (35% of screen width)
+        int(screen_width * 0.09),  # Width for 'Loc.' (9% of screen width)
+        int(screen_width * 0.35)   # Width for 'Tasks' (35% of screen width)
     ]
     for i, width in enumerate(column_widths):
         frame.grid_columnconfigure(i, minsize=width)
@@ -140,7 +139,7 @@ def update_table(data, frame, headers):
         )
         label.grid(row=0, column=i, sticky="nsew")
 
-    for row_idx, row in filtered_data.iterrows():
+    for row_idx, row in paged_data.iterrows():
         for col_idx, value in enumerate(row):
             label = tk.Label(
                 frame,
@@ -185,19 +184,34 @@ def refresh_data():
     data_rmh = get_sheet_data('RMH')
 
     if not data_smh.empty and not data_smh.equals(previous_data_smh):
-        update_table(data_smh, frame_smh, ['Job#', 'Loc.', 'SMH'])
+        update_table(data_smh, frame_smh, ['Job#', 'Loc.', 'SMH'], 0)
         previous_data_smh = data_smh
         update_status_bar('SMH')
 
     if not data_rmh.empty and not data_rmh.equals(previous_data_rmh):
-        update_table(data_rmh, frame_rmh, ['Job#', 'Loc.', 'RMH'])
+        update_table(data_rmh, frame_rmh, ['Job#', 'Loc.', 'RMH'], 0)
         previous_data_rmh = data_rmh
         update_status_bar('RMH')
 
-    root.after(600000, refresh_data)  # Refresh every 5 seconds
+    root.after(600000, refresh_data)  # Refresh every 10 minutes
+
+def switch_page():
+    global current_page_smh, current_page_rmh
+    if previous_data_smh is not None and len(previous_data_smh) > jobs_per_page:
+        total_pages_smh = (len(previous_data_smh) // jobs_per_page) + 1
+        current_page_smh = (current_page_smh + 1) % total_pages_smh
+        update_table(previous_data_smh, frame_smh, ['Job#', 'Loc.', 'SMH'], current_page_smh)
+
+    if previous_data_rmh is not None and len(previous_data_rmh) > jobs_per_page:
+        total_pages_rmh = (len(previous_data_rmh) // jobs_per_page) + 1
+        current_page_rmh = (current_page_rmh + 1) % total_pages_rmh
+        update_table(previous_data_rmh, frame_rmh, ['Job#', 'Loc.', 'RMH'], current_page_rmh)
+
+    root.after(20000, switch_page)
 
 init_internetStatus()
 update_internetStatus()
 
 refresh_data()
+switch_page()
 root.mainloop()
