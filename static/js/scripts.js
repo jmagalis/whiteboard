@@ -3,6 +3,7 @@ let isEditMode = {};
 let ipAddrPort = '172.20.13.94:5021';
 let url = "https://akita-healthy-suitably.ngrok-free.app";
 let otherDatabase = 'RMH';
+let isReadOnlyMode = false;
 
 function switchDatabase(db) {
     currentDatabase = db;
@@ -273,9 +274,16 @@ function expandJobDetail(index) {
     dialog.style.display = 'flex';
 }
 
+
+
 function closeJobDetailDialog() {
     const dialog = document.getElementById('jobDetailDialog');
     dialog.style.display = 'none';
+}
+
+function toggleReadOnlyMode() {
+    isReadOnlyMode = !isReadOnlyMode;
+    console.log(`isReadOnlyMode is now: ${isReadOnlyMode}`);
 }
 
 function displayResults(data) {
@@ -290,80 +298,116 @@ function displayResults(data) {
         resultDiv.classList.add('result-item');
         const lastModified = result['Last Modified'] || 'N/A';
 
-        resultDiv.innerHTML = `
-            <div id="result-item-${index}">
-                <button type="button" class="showHide-button" onclick="toggleFormVisibility(${index})" id="toggle-visibility-btn-${index}" >
-                    Hide Job
-                </button>
-                <div id="update-job-form-${index}" style="display:block;">
-                    <form onsubmit="updateJob(event)" class="form-layout">
-                        <table style="width:75%">
-                            <tr>
-                                <th>Job Number:</th>
-                                <th style="width:15%">Location:</th>
-                                <th style="width:75%">Information:</th>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <input class="inputs" type="text" id="before_job_number_edit_${index}" name="Job#" value="${result['Job#'] || ''}" readonly>
-                                    <input class="inputs" type="text" id="after_job_number_edit_${index}" name="Job#" value="${result['Job#'] || ''}" readonly style="display:none;">
-                                </td>
-                                <td>
-                                    <input class="inputs" type="text" id="location_edit_${index}" name="Loc." value="${result['Loc.'] || ''}" readonly>
-                                </td>
-                                <td>
-                                    <input class="inputs" style="text-align:left" type="text" id="task_edit_${index}" name="SMH" value="${result['Tasks'] || ''}" readonly>
-                                </td>
-                            </tr>
-                        </table>
-                        <div class="subInfoDiv">
-                            <button class="showSubInfo" type="button" onclick="showSubInfo(${index})" id="additional-info-${index}">+ Additional Information</button>
-                            <button class="showSubInfo" type="button" style="float:right" onclick="expandJobDetail(${index})">+ Expand Info</button>
-                        </div>
-                        <div class="subInfoDiv" id="subInfoEdit_${index}" style="display:none;">
-                            <div class="extra-sec">
-                                <label class="dates-tasks-labels" for="balancing-date_edit_${index}">Balancing Date:</label>
-                                <input type="text" class="dates" id="balancing-date_edit_${index}" name="balancing-date_edit" value="${result['Bal Date'] || ''}" readonly>
+
+        if (isReadOnlyMode == false) {
+            resultDiv.innerHTML = `
+                <div id="result-item-${index}">
+                    <button type="button" class="showHide-button" onclick="toggleFormVisibility(${index})" id="toggle-visibility-btn-${index}" >
+                        Hide Job
+                    </button>
+                    <div id="update-job-form-${index}" style="display:block;">
+                        <form onsubmit="updateJob(event)" class="form-layout">
+                            <table style="width:75%">
+                                <tr>
+                                    <th>Job Number:</th>
+                                    <th style="width:15%">Location:</th>
+                                    <th style="width:75%">Information:</th>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input class="inputs" type="text" id="before_job_number_edit_${index}" name="Job#" value="${result['Job#'] || ''}" readonly>
+                                        <input class="inputs" type="text" id="after_job_number_edit_${index}" name="Job#" value="${result['Job#'] || ''}" readonly style="display:none;">
+                                    </td>
+                                    <td>
+                                        <input class="inputs" type="text" id="location_edit_${index}" name="Loc." value="${result['Loc.'] || ''}" readonly>
+                                    </td>
+                                    <td>
+                                        <input class="inputs" style="text-align:left" type="text" id="task_edit_${index}" name="SMH" value="${result['Tasks'] || ''}" readonly>
+                                    </td>
+                                </tr>
+                            </table>
+                            <div class="subInfoDiv">
+                                <button class="showSubInfo" type="button" onclick="showSubInfo(${index})" id="additional-info-${index}">+ Additional Information</button>
+                                <button class="showSubInfo" type="button" style="float:right" onclick="expandJobDetail(${index})">+ Expand Info</button>
                             </div>
-                            <div class="extra-sec">
-                                <label class="dates-tasks-labels" for="commissioning-date_edit_${index}">Commissioning Date:</label>
-                                <input type="text" class="dates" id="commissioning-date_edit_${index}" name="commissioning-date_edit" value="${result['Com Date'] || ''}" readonly>
+                            <div class="subInfoDiv" id="subInfoEdit_${index}" style="display:none;">
+                                <div class="extra-sec">
+                                    <label class="dates-tasks-labels" for="balancing-date_edit_${index}">Balancing Date:</label>
+                                    <input type="text" class="dates" id="balancing-date_edit_${index}" name="balancing-date_edit" value="${result['Bal Date'] || ''}" readonly>
+                                </div>
+                                <div class="extra-sec">
+                                    <label class="dates-tasks-labels" for="commissioning-date_edit_${index}">Commissioning Date:</label>
+                                    <input type="text" class="dates" id="commissioning-date_edit_${index}" name="commissioning-date_edit" value="${result['Com Date'] || ''}" readonly>
+                                </div>
+                                <div class="extra-sec">
+                                    <label class="dates-tasks-labels" for="installer-task_edit_${index}">Installer Tasks:</label>
+                                    <input type="text" class="sub-tasks" id="installer-tasks_edit_${index}" name="installer-tasks_edit" value="${result['Install'] || ''}" readonly>
+                                </div>
+                                <div class="extra-sec">
+                                    <label class="dates-tasks-labels" for="technician-tasks_edit_${index}">Technician Tasks:</label>
+                                    <input type="text" class="sub-tasks" id="technician-tasks_edit_${index}" name="technician-tasks_edit" value="${result['Tech'] || ''}" readonly>
+                                </div>
+                                <div class="extra-sec">
+                                    <label class="dates-tasks-labels" for="designer-tasks_edit_${index}">Designer Tasks:</label>
+                                    <input type="text" class="sub-tasks" id="designer-tasks_edit_${index}" name="designer-tasks_edit" value="${result['Design'] || ''}" readonly>
+                                </div>
+                                <div class="extra-sec">
+                                    <label class="dates-tasks-labels" for="lss-tasks_edit_${index}">LSS Tasks:</label>
+                                    <input type="text" class="sub-tasks" id="lss-tasks_edit_${index}" name="lss-tasks_edit" value="${result['Lead'] || ''}" readonly>
+                                </div>
                             </div>
-                            <div class="extra-sec">
-                                <label class="dates-tasks-labels" for="installer-task_edit_${index}">Installer Tasks:</label>
-                                <input type="text" class="sub-tasks" id="installer-tasks_edit_${index}" name="installer-tasks_edit" value="${result['Install'] || ''}" readonly>
+                            <div style="align-self:center">
+                                <label for="client_edit_${index}">Your Name:</label>
+                                <input type="text" id="client_edit_${index}" name="Client" required>
                             </div>
-                            <div class="extra-sec">
-                                <label class="dates-tasks-labels" for="technician-tasks_edit_${index}">Technician Tasks:</label>
-                                <input type="text" class="sub-tasks" id="technician-tasks_edit_${index}" name="technician-tasks_edit" value="${result['Tech'] || ''}" readonly>
+                            <div style="align-self:center">
+                                <button class="db-button" id="switch-db-${index}" type="button" style="display:none" onclick="switchJobDB(${index})">Switch Database</button>
                             </div>
-                            <div class="extra-sec">
-                                <label class="dates-tasks-labels" for="designer-tasks_edit_${index}">Designer Tasks:</label>
-                                <input type="text" class="sub-tasks" id="designer-tasks_edit_${index}" name="designer-tasks_edit" value="${result['Design'] || ''}" readonly>
+                            <div style="align-self:center">
+                                <button class="db-button" id="toggle-edit-${index}" type="button" onclick="toggleEdit(${index})">Edit Job</button>
+                                <button class="db-button" type="button" onclick="deleteJob(${index})">Delete Job</button>
                             </div>
-                            <div class="extra-sec">
-                                <label class="dates-tasks-labels" for="lss-tasks_edit_${index}">LSS Tasks:</label>
-                                <input type="text" class="sub-tasks" id="lss-tasks_edit_${index}" name="lss-tasks_edit" value="${result['Lead'] || ''}" readonly>
-                            </div>
-                        </div>
-                        <div style="align-self:center">
-                            <label for="client_edit_${index}">Your Name:</label>
-                            <input type="text" id="client_edit_${index}" name="Client" required>
-                        </div>
-                        <div style="align-self:center">
-                            <button class="db-button" id="switch-db-${index}" type="button" style="display:none" onclick="switchJobDB(${index})">Switch Database</button>
-                        </div>
-                        <div style="align-self:center">
-                            <button class="db-button" id="toggle-edit-${index}" type="button" onclick="toggleEdit(${index})">Edit Job</button>
-                            <button class="db-button" type="button" onclick="deleteJob(${index})">Delete Job</button>
-                        </div>
-                    </form>
+                        </form>
+                    </div>
+                    <div class="footer">
+                        <p>Last Modified: ${lastModified}</p>
+                    </div>
                 </div>
-                <div class="footer">
-                    <p>Last Modified: ${lastModified}</p>
+            `;
+        }
+        else {
+            resultDiv.innerHTML = `
+                <div id="result-item-${index}">
+                    <button type="button" class="showHide-button" onclick="toggleFormVisibility(${index})" id="toggle-visibility-btn-${index}" >
+                        Hide Job
+                    </button>
+                    <div id="update-job-form-${index}" style="display:block;">
+                        <form onsubmit="updateJob(event)" class="form-layout">
+                            <div class="job-detail-box">
+                                <h3>Job Details</h3>
+                                <p><strong>Job Number:</strong> ${result['Job#']}</p>
+                                <p><strong>Location:</strong> ${result['Loc.']}</p>
+                                <p><strong>Tasks:</strong> ${result['Tasks']}</p>
+                            </div>
+                            <div class="subInfoDiv">
+                                <button class="showSubInfo" type="button" onclick="showSubInfo(${index})" id="additional-info-${index}">+ Additional Information</button>
+                            </div>
+                            <div class="subInfoDiv" id="subInfoEdit_${index}" style="display:none;">
+                                <p><strong>Balancing Date:</strong> ${result['Bal Date'] || 'N/A'}</p>
+                                <p><strong>Commissioning Date:</strong> ${result['Com Date'] || 'N/A'}</p>
+                                <p><strong>Installer Tasks:</strong> ${result['Install'] || 'N/A'}</p>
+                                <p><strong>Technician Tasks:</strong> ${result['Tech'] || 'N/A'}</p>
+                                <p><strong>Designer Tasks:</strong> ${result['Design'] || 'N/A'}</p>
+                                <p><strong>LSS Tasks:</strong> ${result['Lead'] || 'N/A'}</p>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="footer">
+                        <p>Last Modified: ${lastModified}</p>
+                    </div>
                 </div>
-            </div>
-        `;
+            `;
+        }
 
         resultsContainer.appendChild(resultDiv);
     });

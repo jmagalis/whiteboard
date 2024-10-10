@@ -14,6 +14,10 @@
         <button id="RMH-btn" class="db-button" onclick="switchDatabase('RMH')">RMH</button>
     </div>
 
+    <div class="read-only-container">
+        <button class="mobile-read-only" onclick="toggleReadOnlyMode()">Read-only mode?</button>
+    </div>
+
     <div id="search-job-form">
         <div class="form-wrapper-container">
             <form class="form-wrapper" onsubmit="return searchJob();">
@@ -101,7 +105,7 @@
         </form>
     </div>
     <footer>
-        <p>Release 1.1.1 BETA</p>
+        <p>Release 1.1.5 BETA</p>
     </footer>
     <button class="report-button" onclick="reportError()">
         ?
