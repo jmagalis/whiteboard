@@ -54,7 +54,7 @@ status_label = tk.Label(
 )
 status_label.pack(side="right", fill="both")
 
-jobs_per_page = 24
+jobs_per_page = 23
 current_page_smh = 0
 current_page_rmh = 0
 
