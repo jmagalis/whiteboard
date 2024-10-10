@@ -2,6 +2,7 @@ let currentDatabase = 'SMH'; // Default database
 let isEditMode = {};
 let ipAddrPort = '172.20.13.94:5021';
 let url = "https://akita-healthy-suitably.ngrok-free.app";
+let otherDatabase = 'RMH';
 
 function switchDatabase(db) {
     currentDatabase = db;
@@ -532,6 +533,91 @@ function resetToggleEditForIndex(index) {
     afterJobNumberInput.style.display = 'none';
     toggleButton.innerText = "Edit Job";
     isEditMode[index] = false;
+}
+
+function switchJobDB(index) {
+    console.log(`Switch Job DB triggered for index ${index}`);
+    
+    event.preventDefault();
+
+    let jobNumber = document.getElementById(`before_job_number_edit_${index}`).value || "";
+    let location = document.getElementById(`location_edit_${index}`).value || "";
+    let task = document.getElementById(`task_edit_${index}`).value || "";
+    let clientName = document.getElementById(`client_edit_${index}`).value || "";
+    let balDate = document.getElementById(`balancing-date_edit_${index}`).value || "";
+    let comDate = document.getElementById(`commissioning-date_edit_${index}`).value || "";
+    let installTask = document.getElementById(`installer-tasks_edit_${index}`).value || "";
+    let techTask = document.getElementById(`technician-tasks_edit_${index}`).value || "";
+    let designTask = document.getElementById(`designer-tasks_edit_${index}`).value || "";
+    let lssTask = document.getElementById(`lss-tasks_edit_${index}`).value || "";
+
+    if (!clientName) {
+        alert("Please enter your name before switching databases.");
+        return;
+    }
+
+    let otherDatabase = (currentDatabase === 'SMH') ? 'RMH' : 'SMH';
+
+    console.log(`Current Database: ${currentDatabase}, Other Database: ${otherDatabase}`);
+
+    let jobData = {
+        'Job#': jobNumber,
+        'Loc.': location,
+        'Tasks': task,
+        'Last Modified': clientName,
+        'Database': currentDatabase,
+        'Bal Date': balDate,
+        'Com Date': comDate,
+        'Install': installTask,
+        'Tech': techTask,
+        'Design': designTask,
+        'Lead': lssTask
+    };
+
+    console.log("Job Data to send: ", jobData);
+
+    fetch(`${url}/add_job_${otherDatabase}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(jobData)
+    })
+    .then(response => {
+        if (!response.ok) {
+            return response.json().then(error => {
+                throw new Error(error.message || "Failed to add job to the other database");
+            });
+        }
+        return response.json();
+    })
+    .then(data => { 
+        console.log("Job added to other database: ", data);
+        alert("Job successfully switched to the other database!");
+
+        return fetch(`${url}/delete_job_${currentDatabase}/${jobNumber}`, {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ Client: clientName })
+        });
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            alert(data.message);
+            console.log("Job deleted from current database");
+
+            document.getElementById("job-number-search").value = "";
+            const resultItemContainer = document.getElementById(`update-job-form-${index}`).parentNode; 
+            resultItemContainer.style.display = 'none';
+        } else {
+            throw new Error(data.message);
+        }
+    })
+    .catch(error => {
+        console.error("Error occurred: ", error);
+        alert(`Error: ${error.message}`);
+    });
 }
 
 function showSubInfo(index) {
