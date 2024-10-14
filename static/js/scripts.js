@@ -283,8 +283,9 @@ function closeJobDetailDialog() {
 
 function toggleReadOnlyMode() {
     isReadOnlyMode = !isReadOnlyMode;
-	if(ReadOnlyMode == true) { document.getElementById('MRObutton').innerText = "Read-only Mode On"; }
-	else { document.getElementById('MRObutton').innerText = "Read-only Mode Off"; }
+    const button = document.getElementById('MRObutton');
+	if(isReadOnlyMode == true) { button.innerText = "Read-only Mode On"; }
+	if(isReadOnlyMode == false) { button.innerText = "Read-only Mode Off"; }
     console.log(`isReadOnlyMode is now: ${isReadOnlyMode}`);
 }
 
