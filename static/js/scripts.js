@@ -942,16 +942,16 @@ function reportError() {
 
 function sendEmail() {
     if (isMobileDevice()) {
-        window.location.href = "ms-outlook://compose?to=issac.magallanes@jci.com&subject=Error Report for Release 1.2.1 BETA&body=Please describe the issue you found:";
+        window.location.href = "ms-outlook://compose?to=issac.magallanes@jci.com&subject=Error Report for Release 1.3.0 BETA&body=Please describe the issue you found:";
     } else {
-        window.location.href = "mailto:issac.magallanes@jci.com?subject=Error Report for Release 1.2.1 BETA&body=Please describe the issue you found:";
+        window.location.href = "mailto:issac.magallanes@jci.com?subject=Error Report for Release 1.3.0 BETA&body=Please describe the issue you found:";
     }
     closeDialog();
 }
 
 function sendText() {
     if (isMobileDevice()) {
-        window.location.href = "sms:+15079102595?body=Error Report for Release 1.2.1 BETA - Please describe the issue you found:";
+        window.location.href = "sms:+15079102595?body=Error Report for Release 1.3.0 BETA - Please describe the issue you found:";
     } else {
         alert("SMS option is only available on mobile devices.");
     }

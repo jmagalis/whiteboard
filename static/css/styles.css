@@ -438,6 +438,12 @@ margin-right: 10px;
     padding-inline: 8px; /* 6+2px for border */
 }
 
+.mobile-read-only-label {
+    visibility: hidden;
+    flex: 0 0 auto;
+    margin-right: 10px;
+}
+
 .read-only-container {
     display: flex;
     justify-content: right;
@@ -528,6 +534,10 @@ margin-right: 10px;
     }
     
     .mobile-read-only {
+        display: flex;
+    }
+    
+    .mobile-read-only-label {
         display: flex;
     }
 }
