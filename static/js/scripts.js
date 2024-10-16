@@ -470,6 +470,16 @@ function touchEnd(e) {
 }
 
 function finishReorder() {
+    reorderedJobs.forEach(job => {
+        if (!job['Tasks']) job['Tasks'] = '';
+        if (!job['Bal Date']) job['Bal Date'] = '';
+        if (!job['Com Date']) job['Com Date'] = '';
+        if (!job['Install']) job['Install'] = '';
+        if (!job['Tech']) job['Tech'] = '';
+        if (!job['Design']) job['Design'] = '';
+        if (!job['Lead']) job['Lead'] = '';
+    });
+    
     fetch(`${url}/update_order_${currentDatabase}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -555,11 +565,11 @@ function displayResults(data) {
                             <div class="subInfoDiv" id="subInfoEdit_${index}" style="display:none;">
                                 <div class="extra-sec">
                                     <label class="dates-tasks-labels" for="balancing-date_edit_${index}">Balancing Date:</label>
-                                    <input type="text" class="dates" id="balancing-date_edit_${index}" name="balancing-date_edit" value="${result['Bal Date'] || ''}" readonly>
+                                    <input type="${result['Bal Date'] ? 'date' : 'text'}" minlength="1" maxlength="64" placeholder=" " autocomplete="nope" class="dates" id="balancing-date_edit_${index}" name="balancing-date_edit" value="${result['Bal Date'] || ''}" readonly>
                                 </div>
                                 <div class="extra-sec">
                                     <label class="dates-tasks-labels" for="commissioning-date_edit_${index}">Commissioning Date:</label>
-                                    <input type="text" class="dates" id="commissioning-date_edit_${index}" name="commissioning-date_edit" value="${result['Com Date'] || ''}" readonly>
+                                    <input type="${result['Com Date'] ? 'date' : 'text'}" minlength="1" maxlength="64" placeholder=" " autocomplete="nope" class="dates" id="commissioning-date_edit_${index}" name="commissioning-date_edit" value="${result['Com Date'] || ''}" readonly>
                                 </div>
                                 <div class="extra-sec">
                                     <label class="dates-tasks-labels" for="installer-task_edit_${index}">Installer Tasks:</label>
@@ -609,7 +619,7 @@ function displayResults(data) {
                                 <h3>Job Details</h3>
                                 <p><strong>Job Number:</strong> ${result['Job#']}</p>
                                 <p><strong>Location:</strong> ${result['Loc.']}</p>
-                                <p><strong>Tasks:</strong> ${result['Tasks']}</p>
+                                <p><strong>Tasks:</strong> ${result['Tasks'] || 'N/A'}</p>
                             </div>
                             <div class="subInfoDiv">
                                 <button class="showSubInfo" type="button" onclick="showSubInfo(${index})" id="additional-info-${index}">+ Additional Information</button>
@@ -703,6 +713,7 @@ function toggleEdit(index) {
 
         dates.forEach(function(input) {
             input.removeAttribute('readonly');
+            input.type = 'date';
         });
 
         subTasks.forEach(function(input) {

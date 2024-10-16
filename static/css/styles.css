@@ -369,7 +369,7 @@ margin-right: 10px;
 
 .dates {
     width: 1px;
-    min-width: calc(8ch + 6px);
+    min-width: calc(12ch + 6px);
     text-align: center;
     padding-left: 5px;
     padding-right: 5px;
@@ -538,7 +538,7 @@ margin-right: 10px;
     }
     
     .mobile-read-only-label {
-        display: flex;
+        visibility: visible;
     }
 }
 
