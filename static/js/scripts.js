@@ -5,6 +5,31 @@ let url = "https://akita-healthy-suitably.ngrok-free.app";
 let otherDatabase = 'RMH';
 let isReadOnlyMode = false;
 
+function devMode() {
+    document.getElementById('devButton').style.display = "block";
+}
+
+function showPasscode() {
+    document.getElementById('pw').style.display = "block";
+    document.getElementById('pwButton').style.display = "block";
+}
+
+function protectpasscode() {
+    const result = document.getElementById("pw").value;
+    let passcode = 000;
+    let space = '';
+    if (result == space) {
+      alert("Type passcode")
+    } else {
+      if (result == passcode) {
+         devMode();
+      } else {
+         alert("Incorrect Passcode");
+         location.reload();
+      }
+    }
+}
+
 function switchDatabase(db) {
     currentDatabase = db;
     document.getElementById('SMH-btn').classList.remove('active');
@@ -35,12 +60,15 @@ function switchDatabase(db) {
     console.log(`Went past the resetToggleEdit function.`);
     document.getElementById('results-container').innerHTML = '';
     console.log(`Destroyed the results container!`);
+    document.getElementById("read-only-container").style.display = "flex";
 }
 
 function showAddForm() {
     document.getElementById("add-job-form").style.display = "block";
     document.getElementById("search-job-form").style.display = "none";
+    document.getElementById("drag-container").style.display = "none";
     document.getElementById('results-container').innerHTML = '';
+    document.getElementById("read-only-container").style.display = "none";
 }
 
 function addJob(event) {
@@ -232,6 +260,7 @@ function searchJob() {
 
 function viewAll() {
     let searchParameter = document.getElementById("search-parameter").value;
+    document.getElementById("drag-container").style.display = "none";
     resetToggleEdit();
 
     console.log("View All in Category button clicked");
@@ -274,7 +303,195 @@ function expandJobDetail(index) {
     dialog.style.display = 'flex';
 }
 
+let reorderedJobs = [];
 
+function showDragAndDrop() {
+    const dragContainer = document.getElementById('drag-container');
+    const jobCardsContainer = document.getElementById('drag-job-cards');
+    document.getElementById("add-job-form").style.display = "none";
+    document.getElementById('results-container').innerHTML = '';
+    dragContainer.style.display = 'block';
+    jobCardsContainer.innerHTML = ''; // Clear previous content
+
+    // Fetch all jobs using the viewAll endpoint
+    fetch(`${url}/viewAll_job_${currentDatabase}`)
+        .then(response => response.json())
+        .then(data => {
+            reorderedJobs = data; // Store all jobs for reordering
+
+            data.forEach((job, index) => {
+                const box = document.createElement('div');
+                box.classList.add('box');
+                
+                const item = document.createElement('div');
+                item.classList.add('item');
+                item.setAttribute('draggable', true);
+                item.setAttribute('data-index', index);
+                item.innerText = job['Job#'];
+
+                box.appendChild(item);
+
+                attachDragAndTouchListeners(item, box);  // Attach drag listeners to the card
+                jobCardsContainer.appendChild(box);
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching jobs:', error);
+            alert('Failed to load jobs.');
+            console.log(data);
+        });
+}
+
+function attachDragAndTouchListeners(item, box) {
+    item.addEventListener('dragstart', dragStart);
+    item.addEventListener('dragend', dragEnd);
+    
+    box.addEventListener('dragenter', dragEnter);
+    box.addEventListener('dragover', dragOver);
+    box.addEventListener('dragleave', dragLeave);
+    box.addEventListener('drop', drop);
+    
+    item.addEventListener('touchstart', touchStart);
+    item.addEventListener('touchmove', touchMove);
+    item.addEventListener('touchend', touchEnd);
+}
+
+function dragStart(e) {
+    e.dataTransfer.setData('text/plain', e.target.getAttribute('data-index'));
+    setTimeout(() => {
+        e.target.classList.add('hide');
+    }, 0);
+}
+
+function dragEnd(e) {
+    e.target.classList.remove('hide');
+}
+
+function dragEnter(e) {
+    e.preventDefault();
+    e.target.classList.add('drag-over');
+}
+
+function dragOver(e) {
+    e.preventDefault();
+    e.target.classList.add('drag-over');
+}
+
+function dragLeave(e) {
+    e.target.classList.remove('drag-over');
+}
+
+function drop(e) {
+    e.preventDefault();
+    e.target.classList.remove('drag-over');
+
+    const draggedIndex = e.dataTransfer.getData('text/plain');
+    const draggedItem = document.querySelector(`[data-index='${draggedIndex}']`);
+
+    const targetBox = e.target.closest('.box');
+
+    if (!targetBox || draggedItem === targetBox.querySelector('.item')) {
+        return;
+    }
+
+    // Get the parent boxes of the dragged and target items
+    const draggedParentBox = draggedItem.parentElement;
+    const targetParentBox = targetBox;
+
+    // Get the list of all boxes
+    const allBoxes = Array.from(document.querySelectorAll('.box'));
+    const draggedBoxIndex = allBoxes.indexOf(draggedParentBox);
+    const targetBoxIndex = allBoxes.indexOf(targetParentBox);
+
+    // Insert the dragged item before or after the target based on their relative positions
+    if (draggedBoxIndex < targetBoxIndex) {
+        // If the dragged item is above the target, insert it after the target
+        targetParentBox.parentElement.insertBefore(draggedParentBox, targetParentBox.nextSibling);
+    } else {
+        // If the dragged item is below the target, insert it before the target
+        targetParentBox.parentElement.insertBefore(draggedParentBox, targetParentBox);
+    }
+
+    // Update reorderedJobs array to reflect the new order
+    reorderedJobs.splice(targetBoxIndex, 0, reorderedJobs.splice(draggedBoxIndex, 1)[0]);
+}
+
+function touchStart(e) {
+    const touch = e.touches[0];
+    const item = e.target;
+
+    // Simulate drag start by setting data and hiding the item
+    e.dataTransfer = {
+        setData: function(type, val) {
+            this.data = val;
+        },
+        getData: function() {
+            return this.data;
+        }
+    };
+    e.dataTransfer.setData('text/plain', item.getAttribute('data-index'));
+
+    item.classList.add('hide');
+    item.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.2)';
+}
+
+function touchMove(e) {
+    e.preventDefault();  // Prevent scrolling
+
+    const touch = e.touches[0];
+    const item = e.target;
+
+    // Move the item visually during touch
+    item.style.position = 'absolute';
+    item.style.left = `${touch.pageX - item.offsetWidth / 2}px`;
+    item.style.top = `${touch.pageY - item.offsetHeight / 2}px`;
+}
+
+function touchEnd(e) {
+    e.preventDefault();
+
+    const item = e.target;
+    item.classList.remove('hide');
+    item.style.boxShadow = '';
+    item.style.position = '';
+
+    // Simulate the drop event
+    const targetBox = document.elementFromPoint(e.changedTouches[0].clientX, e.changedTouches[0].clientY).closest('.box');
+    if (targetBox) {
+        // Reuse the existing drop logic for touch events
+        drop({
+            target: targetBox,
+            dataTransfer: {
+                getData: () => item.getAttribute('data-index')
+            },
+            preventDefault: () => {},
+        });
+    }
+}
+
+function finishReorder() {
+    fetch(`${url}/update_order_${currentDatabase}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(reorderedJobs)  // Send the reordered jobs directly
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            alert('Jobs reordered successfully!');
+            console.log('Updated order:', data);
+            document.getElementById('drag-container').style.display = 'none';
+            document.getElementById('add-job-form').style.display = 'none';
+            document.getElementById('results-container').innerHTML = '';
+        } else {
+            throw new Error(data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error updating order:', error);
+        alert('Failed to reorder jobs.');
+    });
+}
 
 function closeJobDetailDialog() {
     const dialog = document.getElementById('jobDetailDialog');
@@ -284,8 +501,10 @@ function closeJobDetailDialog() {
 function toggleReadOnlyMode() {
     isReadOnlyMode = !isReadOnlyMode;
     const button = document.getElementById('MRObutton');
-	if(isReadOnlyMode == true) { button.innerText = "Read-only Mode On"; }
-	if(isReadOnlyMode == false) { button.innerText = "Read-only Mode Off"; }
+	if(isReadOnlyMode == true) { button.innerText = "ON"; }
+	if(isReadOnlyMode == false) { button.innerText = "OFF"; }
+    document.getElementById("drag-container").style.display = "none";
+    document.getElementById('results-container').innerHTML = '';
     console.log(`isReadOnlyMode is now: ${isReadOnlyMode}`);
 }
 

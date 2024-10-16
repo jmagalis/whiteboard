@@ -425,7 +425,9 @@ margin-right: 10px;
 .mobile-read-only {
     display: none;
     border: none;
+    font-family: 'Neue Montreal', sans-serif;
     font-size: 14px;
+    color: black;
     cursor: pointer;
     border-radius: 3px;
     white-space: nowrap;
@@ -440,6 +442,84 @@ margin-right: 10px;
     display: flex;
     justify-content: right;
     margin: 20px 0;
+}
+
+.drag-cards-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    min-height: 80vh;
+    justify-content: center;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.draggable-card {
+    padding: 15px;
+    width: 90%;  /* Make cards responsive on mobile */
+    max-width: 300px;
+    border: 1px solid #000;
+    background-color: #f1f1f1;
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: grab;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+    touch-action: none;
+    user-select: none;
+}
+
+.draggable-card:active {
+    transform: scale(1.05);  /* Add a scaling effect when dragged */
+    cursor: grabbing;
+}
+
+.placeholder {
+    background-color: #d3d3d3;
+    border: 2px dashed #555;
+    height: 60px;
+    margin: 10px 0;
+    transition: background-color 0.3s;
+}
+
+.box {
+    width: 100%;
+    border: none;/*dashed 1px blue;*/
+}
+
+
+.drag-over {
+    border: none;/*dashed 3px red;*/
+}
+
+.item {
+    padding: 15px;
+    margin: auto;
+    width: 90%;  /* Make cards responsive on mobile */
+    max-width: 300px;
+    border: 1px solid #000;
+    background-color: #f1f1f1;
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: grab;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+    touch-action: none;
+    user-select: none;
+}
+
+.item:active {
+    transform: scale(1.05);
+    cursor: grabbing;
+}
+
+.hide {
+    opacity: 50%;
 }
 
 @media (max-width: 600px) {

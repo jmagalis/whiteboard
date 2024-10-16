@@ -230,6 +230,25 @@ def get_sheet_data(sheet_name):
         return jsonify({'status': 'error', 'message': f'Sheet {sheet_name} not found'}), 404
     except Exception as e:
         return jsonify({'status': 'error', 'message': str(e)}), 500
+     
+COLUMN_ORDER = [
+    'Job#', 'Loc.', 'Tasks', 
+    'Bal Date', 'Com Date', 'Install', 'Tech', 'Design', 'Lead',
+    'Last Modified'
+]
+        
+@app.route('/update_order_<database_id>', methods=['POST'])
+def update_order(database_id):
+    try:
+        data = request.get_json()
+        df_existing = pd.read_excel(database_path, sheet_name=database_id)
+        df_new = pd.DataFrame(data)
+        df_new = df_new[df_existing.columns]
+        with pd.ExcelWriter(database_path, mode='a', engine='openpyxl', if_sheet_exists='replace') as writer:
+            df_new.to_excel(writer, sheet_name=database_id, index=False)
+        return jsonify({'status': 'success', 'message': 'Order updated successfully'})
+    except Exception as e:
+        return jsonify({'status': 'error', 'message': str(e)}), 500
 
 def run_scheduler():
     schedule.every().day.at("23:59").do(backup_and_clear_log)
