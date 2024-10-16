@@ -2,7 +2,7 @@ import pandas as pd
 import tkinter as tk
 from tkinter import font
 import requests
-from datetime import datetime
+from datetime import datetime, timedelta
 
 url = "https://akita-healthy-suitably.ngrok-free.app"
 
@@ -105,8 +105,19 @@ def scroll_text(label, text, column_index, scroll_delay=150, restart_delay=3000)
         scroll()
     start_scrolling()
 
+def get_job_color(commissioning_date, balancing_date):
+    today = datetime.today().date()
+    commissioning_date = pd.to_datetime(commissioning_date).date()
+    balancing_date = pd.to_datetime(balancing_date).date()
+
+    if commissioning_date - timedelta(weeks=2) <= today <= commissioning_date:
+        return "red"
+    elif balancing_date - timedelta(weeks=2) <= today <= balancing_date:
+        return "green"
+    return "black"
+
 def update_table(data, frame, headers, page):
-    filtered_data = data[['Job#', 'Loc.', 'Tasks']] if 'Job#' in data.columns else pd.DataFrame()
+    filtered_data = data[['Job#', 'Loc.', 'Tasks', 'Commissioning Date', 'Balancing Date']] if 'Job#' in data.columns else pd.DataFrame()
 
     # Get the jobs for the current page
     start_index = page * jobs_per_page
@@ -140,7 +151,10 @@ def update_table(data, frame, headers, page):
         label.grid(row=0, column=i, sticky="nsew")
 
     for row_idx, row in paged_data.iterrows():
-        for col_idx, value in enumerate(row):
+        commissioning_date = row['Commissioning Date']
+        balancing_date = row['Balancing Date']
+        job_color = get_job_color(commissioning_date, balancing_date)
+        for col_idx, value in enumerate(row[['Job#', 'Loc.', 'Tasks']]):
             label = tk.Label(
                 frame,
                 text=value,
@@ -150,7 +164,8 @@ def update_table(data, frame, headers, page):
                 padx=5,
                 pady=5,
                 width=1,
-                anchor="center" if col_idx < 2 else "w"
+                anchor="center" if col_idx < 2 else "w",
+                fg=job_color if col_idx == 0 else "black"
             )
             label.grid(row=row_idx + 1, column=col_idx, sticky="nsew")
 
