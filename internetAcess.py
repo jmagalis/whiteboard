@@ -10,7 +10,6 @@ import time
 import subprocess
 import os
 import requests
-import keyboard
 
 def check_internet(attempts=3, delay=1):
     for attempt in range(attempts):
