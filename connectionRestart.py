@@ -26,8 +26,17 @@ def stop_monitor():
         monitor_process = None
         print("Stop successful")
 
+def check_display_change():
+    try:
+        result = subprocess.run(['xrandr', '--current'], stdout=subprocess.PIPE)
+        return result.stdout.decode('utf-8')
+    except Exception as e:
+        print(f"Error checking display: {e}")
+        return None
+
 def main():
     internet_connected = check_internet_connection()
+    current_display_state = check_display_change()
 
     if internet_connected:
         print("Internet connected. Running monitor.py...")
@@ -35,8 +44,9 @@ def main():
 
     while True:
         time.sleep(5)
-        new_connection_status = check_internet_connection()
 
+        # Check for internet reconnection
+        new_connection_status = check_internet_connection()
         if new_connection_status and not internet_connected:
             print("Internet reconnected. Running monitor.py...")
             start_monitor()
@@ -46,6 +56,14 @@ def main():
             stop_monitor()
 
         internet_connected = new_connection_status
+
+        # Check for display change
+        new_display_state = check_display_change()
+        if new_display_state and new_display_state != current_display_state:
+            print("Display changed. Restarting monitor.py...")
+            stop_monitor()
+            start_monitor()
+            current_display_state = new_display_state
 
 if __name__ == "__main__":
     main()
