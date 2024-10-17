@@ -113,11 +113,11 @@ def get_job_color(commissioning_date, balancing_date):
     if commissioning_date - timedelta(weeks=2) <= today <= commissioning_date:
         return "red"
     elif balancing_date - timedelta(weeks=2) <= today <= balancing_date:
-        return "green"
+        return "orange"
     return "black"
 
 def update_table(data, frame, headers, page):
-    filtered_data = data[['Job#', 'Loc.', 'Tasks', 'Commissioning Date', 'Balancing Date']] if 'Job#' in data.columns else pd.DataFrame()
+    filtered_data = data[['Job#', 'Loc.', 'Tasks', 'Com Date', 'Bal Date']] if 'Job#' in data.columns else pd.DataFrame()
 
     # Get the jobs for the current page
     start_index = page * jobs_per_page
@@ -151,8 +151,8 @@ def update_table(data, frame, headers, page):
         label.grid(row=0, column=i, sticky="nsew")
 
     for row_idx, row in paged_data.iterrows():
-        commissioning_date = row['Commissioning Date']
-        balancing_date = row['Balancing Date']
+        commissioning_date = row['Com Date']
+        balancing_date = row['Bal Date']
         job_color = get_job_color(commissioning_date, balancing_date)
         for col_idx, value in enumerate(row[['Job#', 'Loc.', 'Tasks']]):
             label = tk.Label(
