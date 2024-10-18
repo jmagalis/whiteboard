@@ -182,7 +182,7 @@ def update_table(data, frame, headers, page):
                 label.config(text=value)
 
 def get_sheet_data(sheet_name):
-    response = requests.get(f"{url}/get_sheet_data/{sheet_name}")
+    response = requests.get(f"{url}/get_sheet_data/MAYO.xlsx/{sheet_name}")
     if response.status_code == 200:
         data = response.json().get('data', [])
         return pd.DataFrame(data)

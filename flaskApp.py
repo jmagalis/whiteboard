@@ -220,10 +220,10 @@ def viewAll(category_id, database_id):
     else:
         return jsonify({'error': 'No records found'}), 404
 
-@app.route('/get_sheet_data/<sheet_name>', methods=['GET'])
-def get_sheet_data(sheet_name):
+@app.route('/get_sheet_data/<file_name>/<sheet_name>', methods=['GET'])
+def get_sheet_data(file_name, sheet_name):
     try:
-        df = pd.read_excel(database_path, sheet_name=sheet_name)
+        df = pd.read_excel(file_name, sheet_name=sheet_name)
         data = df.fillna('').to_dict(orient='records')
         return jsonify({'status': 'success', 'data': data})
     except ValueError:

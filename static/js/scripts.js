@@ -5,31 +5,6 @@ let url = "https://akita-healthy-suitably.ngrok-free.app";
 let otherDatabase = 'RMH';
 let isReadOnlyMode = false;
 
-function devMode() {
-    document.getElementById('devButton').style.display = "block";
-}
-
-function showPasscode() {
-    document.getElementById('pw').style.display = "block";
-    document.getElementById('pwButton').style.display = "block";
-}
-
-function protectpasscode() {
-    const result = document.getElementById("pw").value;
-    let passcode = 000;
-    let space = '';
-    if (result == space) {
-      alert("Type passcode")
-    } else {
-      if (result == passcode) {
-         devMode();
-      } else {
-         alert("Incorrect Passcode");
-         location.reload();
-      }
-    }
-}
-
 function switchDatabase(db) {
     currentDatabase = db;
     document.getElementById('SMH-btn').classList.remove('active');
@@ -946,6 +921,131 @@ function toggleFormVisibility(index) {
     }
 }
 
+function protectpasscode() {
+    event.preventDefault();
+    const result = document.getElementById("pw").value;
+    let passcode = 'Mayoteam24!';
+    let space = '';
+    if (result == space) {
+      alert("Type passcode")
+    } else {
+      if (result == passcode) {
+         showAdmin();
+         document.getElementById("jobDetailDialog").style.display = "none";
+      } else {
+         alert("Incorrect Passcode");
+         location.reload();
+      }
+    }
+}
+
+function admin() {
+    document.getElementById("jobDetailDialog").style.display = "flex";
+    const container = document.getElementById("jobDetailContent")
+    container.innerHTML = `
+        <form onsubmit="return protectpasscode();">
+            <input type="password" placeholder="Password" id="pw">
+            <button onclick="protectpasscode()" id="pwButton">Enter</button>
+        </form>
+    `;
+}
+
+function showAdmin() {
+    document.getElementById("center-buttons").style.display = "none";
+    document.getElementById("add-job-form").style.display = "none";
+    document.getElementById("job-number-search").value = "";
+    document.getElementById("search-job-form").style.display = "none";
+    document.getElementById("log-button").style.display = "block";
+}
+
+function log() {
+    const adminView = document.getElementById("admin-currentView");
+    adminView.innerHTML = `
+        <table id="data-table" style="width:95%">
+            <tr>
+                <th>Timestamp</th>
+                <th>Action</th>
+                <th>Job#</th>
+                <th>Loc.</th>
+                <th>Tasks</th>
+                <th>Database</th>
+                <th>User</th>
+                <th>Bal date</th>
+                <th>Com Date</th>
+                <th>Install</th>
+                <th>Tech</th>
+                <th>Design</th>
+                <th>Lead</th>
+            </tr>
+        </table>
+    `;
+    
+    fetch(`${url}/get_sheet_data/log.xlsx/Sheet1`)
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(error => {
+                    throw new Error(error.message || "No matching records found");
+                });
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log("Retrieved Data: ", data);
+            populateTable(data.data);
+        })
+        .catch(error => {
+            alert(`Error: ${error.message}`);
+        });
+    
+    return false;
+}
+
+function populateTable(rows) {
+    const table = document.getElementById("data-table");
+
+    // Check if rows is an array
+    if (!Array.isArray(rows)) {
+        console.warn("Expected an array for rows, received:", rows);
+        return; // Exit if rows is not an array
+    }
+
+    // Clear previous rows (if any)
+    // You might want to keep headers, so just clear the body
+    const tbody = document.createElement("tbody");
+    table.appendChild(tbody);
+
+    // If there are no records, show a message
+    if (rows.length === 0) {
+        const tr = document.createElement("tr");
+        const td = document.createElement("td");
+        td.colSpan = 13; // Adjust based on the number of columns
+        td.textContent = "No records found.";
+        tr.appendChild(td);
+        tbody.appendChild(tr);
+        return;
+    }
+
+    // Loop through the data and create rows
+    rows.forEach(row => {
+        const tr = document.createElement("tr");
+        
+        // Create a cell for each expected key
+        const expectedKeys = [
+            "Timestamp", "Action", "Job#", "Loc.", "Tasks", 
+            "Database", "User", "Bal date", "Com Date", 
+            "Install", "Tech", "Design", "Lead"
+        ];
+        
+        expectedKeys.forEach(key => {
+            const td = document.createElement("td");
+            td.textContent = row[key] || ''; // Use an empty string if the key is missing
+            tr.appendChild(td); // Append the cell to the row
+        });
+
+        tbody.appendChild(tr); // Append the row to the table body
+    });
+}
+
 function reportError() {
     const dialog = document.getElementById('errorReportDialog');
     dialog.style.display = 'block';
@@ -953,16 +1053,16 @@ function reportError() {
 
 function sendEmail() {
     if (isMobileDevice()) {
-        window.location.href = "ms-outlook://compose?to=issac.magallanes@jci.com&subject=Error Report for Release 1.3.0 BETA&body=Please describe the issue you found:";
+        window.location.href = "ms-outlook://compose?to=issac.magallanes@jci.com&subject=Error Report for Release 1.3.1 BETA&body=Please describe the issue you found:";
     } else {
-        window.location.href = "mailto:issac.magallanes@jci.com?subject=Error Report for Release 1.3.0 BETA&body=Please describe the issue you found:";
+        window.location.href = "mailto:issac.magallanes@jci.com?subject=Error Report for Release 1.3.1 BETA&body=Please describe the issue you found:";
     }
     closeDialog();
 }
 
 function sendText() {
     if (isMobileDevice()) {
-        window.location.href = "sms:+15079102595?body=Error Report for Release 1.3.0 BETA - Please describe the issue you found:";
+        window.location.href = "sms:+15079102595?body=Error Report for Release 1.3.1 BETA - Please describe the issue you found:";
     } else {
         alert("SMS option is only available on mobile devices.");
     }

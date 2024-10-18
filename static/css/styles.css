@@ -528,6 +528,11 @@ margin-right: 10px;
     opacity: 50%;
 }
 
+#admin-currentView {
+    overflow-y: auto;
+    margin-bottom: 100px;
+}
+
 @media (max-width: 600px) {
     .dialog-content {
         width: 90%; /* Make the dialog box responsive on smaller screens */
