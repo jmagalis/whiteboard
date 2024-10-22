@@ -272,7 +272,7 @@ function expandJobDetail(index) {
         <h3>Job Details</h3>
         <p><strong>Job Number:</strong> ${result['Job#']}</p>
         <p><strong>Location:</strong> ${result['Loc.']}</p>
-        <p><strong>Tasks:</strong> ${result['Tasks']}</p>
+        <p><strong>Tasks:</strong> ${result['Tasks'] || ""}</p>
     `;
     
     dialog.style.display = 'flex';
@@ -1032,7 +1032,7 @@ function populateTable(rows) {
         // Create a cell for each expected key
         const expectedKeys = [
             "Timestamp", "Action", "Job#", "Loc.", "Tasks", 
-            "Database", "User", "Bal date", "Com Date", 
+            "Database", "User", "Bal Date", "Com Date", 
             "Install", "Tech", "Design", "Lead"
         ];
         
